@@ -36,7 +36,10 @@ public class Player : MonoBehaviour
       return;
 
 
-    Func<string, Vector3, GameObject> GetBullet = (BulletName, offset) => Instantiate(Resources.Load<GameObject>("Prefabs/" + BulletName), transform.position + offset, transform.rotation);
+    Func<string, Vector3, GameObject> GetBullet = (BulletName, offset) =>
+    Instantiate(Resources.Load<GameObject>("Prefabs/" + BulletName),
+                transform.position + offset,
+                transform.rotation);
     Action<GameObject> BulletFire = (gameobject) => gameobject.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 10, ForceMode2D.Impulse);
     switch (power)
     {
@@ -54,7 +57,6 @@ public class Player : MonoBehaviour
         BulletFire(GetBullet("Player_Bullet_A", Vector3.left * 0.35f));
         break;
     }
-
     curShotDelay = 0;
   }
   void Move()
