@@ -9,8 +9,7 @@ public class Player : MonoBehaviour
   {
     float h = Input.GetAxisRaw("Horizontal");
     float v = Input.GetAxisRaw("Vertical");
-    Vector3 curPos = transform.position;
-    Vector3 nextPos = new Vector3(h, v, 0) * speed * Time.deltaTime;
-    transform.position = curPos + nextPos;
+    Vector3 nextPos = transform.position + new Vector3(h, v, 0).normalized * speed * Time.deltaTime;
+    transform.position = new Vector3(Mathf.Clamp(nextPos.x, -2.2f, 2.2f), Mathf.Clamp(nextPos.y, -4.5f, 4.5f), nextPos.z);
   }
 }
