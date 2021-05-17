@@ -10,8 +10,7 @@ public class Player : MonoBehaviour
   public float maxShotDelay;
   public float curShotDelay;
 
-  public GameObject bulletObjA;
-  public GameObject bulletObjB;
+  public GameManager manager;
 
 
   Animator anim;
@@ -59,6 +58,10 @@ public class Player : MonoBehaviour
     }
     curShotDelay = 0;
   }
+  void Reload()
+  {
+    curShotDelay = Mathf.Clamp(curShotDelay + Time.deltaTime, 0, 0.3f);
+  }
   void Move()
   {
     float h = Input.GetAxisRaw("Horizontal");
@@ -72,9 +75,12 @@ public class Player : MonoBehaviour
     }
   }
 
-  void Reload()
+  void OnTriggerEnter2D(Collider2D collision)
   {
-    curShotDelay = Mathf.Clamp(curShotDelay + Time.deltaTime, 0, 0.3f);
+    if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyBullet")
+    {
+      manager.RespawnPlayer();
+      gameObject.SetActive(false);
+    }
   }
-
 }
