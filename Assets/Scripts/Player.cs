@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+  public int life;
+  public int score;
   public float speed;
   public int power;
   public float maxShotDelay;
@@ -79,8 +81,18 @@ public class Player : MonoBehaviour
   {
     if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyBullet")
     {
-      manager.RespawnPlayer();
-      gameObject.SetActive(false);
+      life--;
+      manager.UpdateLifeIcon(life);
+      if (life == 0)
+      {
+        manager.GameOver();
+      }
+      else
+      {
+        manager.RespawnPlayer();
+        gameObject.SetActive(false);
+
+      }
     }
   }
 }
