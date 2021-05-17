@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -69,6 +70,9 @@ public class GameManager : MonoBehaviour
   {
     player.transform.position = RespawnPoistion;
     player.SetActive(true);
+
+    Player playerLogic = player.GetComponent<Player>();
+    playerLogic.isHit = false;
   }
 
   public void UpdateLifeIcon(int life)
@@ -90,4 +94,6 @@ public class GameManager : MonoBehaviour
   {
     gameOverSet.SetActive(true);
   }
+
+  public void GameRetry() => SceneManager.LoadScene(0);
 }

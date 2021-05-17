@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
   public int power;
   public float maxShotDelay;
   public float curShotDelay;
+  public bool isHit;
 
   public GameManager manager;
 
@@ -81,6 +82,10 @@ public class Player : MonoBehaviour
   {
     if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyBullet")
     {
+      if (isHit)
+        return;
+
+      isHit = true;
       life--;
       manager.UpdateLifeIcon(life);
       if (life == 0)
@@ -90,9 +95,9 @@ public class Player : MonoBehaviour
       else
       {
         manager.RespawnPlayer();
-        gameObject.SetActive(false);
-
       }
+      gameObject.SetActive(false);
+      Destroy(collision.gameObject);
     }
   }
 }
