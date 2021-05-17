@@ -354,6 +354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
+  power: 1
   maxShotDelay: 0.15
   curShotDelay: 0
   bulletObjA: {fileID: 4720162123545640066, guid: 74d1d05ec1d119b4b97797bafb1df0c5, type: 3}
