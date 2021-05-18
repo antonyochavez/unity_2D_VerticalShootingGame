@@ -9,9 +9,15 @@ public class Player : MonoBehaviour
   public int score;
   public float speed;
   public int power;
+  public int boom;
+  public int maxPower;
+  public int maxBoom;
   public float maxShotDelay;
   public float curShotDelay;
   public bool isHit;
+  public bool isBoomTime;
+
+  public GameObject boomEffect;
 
   public GameManager manager;
 
@@ -26,6 +32,7 @@ public class Player : MonoBehaviour
   {
     Move();
     Fire();
+    Boom();
     Reload();
   }
 
@@ -78,6 +85,34 @@ public class Player : MonoBehaviour
     }
   }
 
+  void Boom()
+  {
+    if (!Input.GetButton("Fire2"))
+      return;
+    if (isBoomTime)
+      return;
+
+    if (boom == 0)
+      return;
+
+    boom--;
+    isBoomTime = true;
+    manager.UpdateBoomIcon(boom);
+
+    //#1. Effect visible
+    boomEffect.SetActive(true);
+    Invoke("OffBoomEffect", 3f);
+    //#2. Remove Enemy
+    GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+    foreach (GameObject enemy in enemies)
+    {
+      Enemy enemyLogic = enemy.GetComponent<Enemy>();
+      enemyLogic.OnHit(1000);
+    }
+    //#. Remove Enemy Bullet
+    GameObject[] enemiesbulltets = GameObject.FindGameObjectsWithTag("EnemyBullet");
+    Array.ForEach<GameObject>(enemiesbulltets, (bullet) => Destroy(bullet));
+  }
   void OnTriggerEnter2D(Collider2D collision)
   {
     if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "EnemyBullet")
@@ -99,5 +134,34 @@ public class Player : MonoBehaviour
       gameObject.SetActive(false);
       Destroy(collision.gameObject);
     }
+    else if (collision.gameObject.tag == "Item")
+    {
+      Item item = collision.gameObject.GetComponent<Item>();
+      switch (item.type)
+      {
+        case "Coin":
+          score += 1000;
+          break;
+        case "Power":
+          if (power == maxPower)
+            score += 500;
+          else
+            power++;
+          break;
+        case "Boom":
+          if (boom == maxBoom)
+            score += 1000;
+          else
+            boom++;
+          manager.UpdateBoomIcon(boom);
+          break;
+      }
+      Destroy(collision.gameObject);
+    }
+  }
+  void OffBoomEffect()
+  {
+    boomEffect.SetActive(false);
+    isBoomTime = false;
   }
 }

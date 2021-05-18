@@ -14,14 +14,11 @@ public class GameManager : MonoBehaviour
   public GameObject player;
   public Text scoreText;
   public Image[] lifeImage;
+  public Image[] boomImage;
   public GameObject gameOverSet;
 
-  private Vector3 RespawnPoistion;
+  private Vector3 RespawnPoistion = new Vector3(0, -4, 0);
 
-  void Awake()
-  {
-    RespawnPoistion = player.transform.position;
-  }
   void Update()
   {
     curSpawnDelay += Time.deltaTime;
@@ -87,6 +84,20 @@ public class GameManager : MonoBehaviour
     for (int index = 0; index < life; index++)
     {
       lifeImage[index].color = new Color(1, 1, 1, 1);
+    }
+  }
+  public void UpdateBoomIcon(int boom)
+  {
+    //#.UI Boom Init Disable
+    for (int index = 0; index < 3; index++)
+    {
+      boomImage[index].color = new Color(1, 1, 1, 0);
+    }
+
+    //#.UI Boom Active
+    for (int index = 0; index < boom; index++)
+    {
+      boomImage[index].color = new Color(1, 1, 1, 1);
     }
   }
 
