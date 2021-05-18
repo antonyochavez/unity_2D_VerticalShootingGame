@@ -11,4 +11,13 @@ public class Item : MonoBehaviour
     rigid = GetComponent<Rigidbody2D>();
     rigid.velocity = Vector2.down * 0.5f;
   }
+
+  void OnTriggerEnter2D(Collider2D collision)
+  {
+    var colObj = collision.gameObject;
+    if (colObj.tag == "BorderBullet")
+    {
+      Destroy(gameObject);
+    }
+  }
 }
