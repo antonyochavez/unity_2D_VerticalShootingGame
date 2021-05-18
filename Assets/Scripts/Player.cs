@@ -19,7 +19,8 @@ public class Player : MonoBehaviour
 
   public GameObject boomEffect;
 
-  public GameManager manager;
+  public GameManager gameManager;
+  public ObjectManager objectManager;
 
 
   Animator anim;
@@ -45,25 +46,33 @@ public class Player : MonoBehaviour
       return;
 
 
-    Func<string, Vector3, GameObject> GetBullet = (BulletName, offset) =>
-    Instantiate(Resources.Load<GameObject>("Prefabs/" + BulletName),
-                transform.position + offset,
-                transform.rotation);
     Action<GameObject> BulletFire = (gameobject) => gameobject.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 10, ForceMode2D.Impulse);
     switch (power)
     {
       case 1:
         //Power One
-        BulletFire(GetBullet("Player_Bullet_A", Vector3.zero));
+        GameObject bullet = objectManager.MakeObj("BulletPlayerA");
+        bullet.transform.position = transform.position;
+        BulletFire(bullet);
         break;
       case 2:
-        BulletFire(GetBullet("Player_Bullet_A", Vector3.right * 0.1f));
-        BulletFire(GetBullet("Player_Bullet_A", Vector3.left * 0.1f));
+        GameObject bulletR = objectManager.MakeObj("BulletPlayerA");
+        GameObject bulletL = objectManager.MakeObj("BulletPlayerA");
+        bulletR.transform.position = transform.position + Vector3.right * 0.1f;
+        bulletL.transform.position = transform.position + Vector3.left * 0.1f;
+        BulletFire(bulletR);
+        BulletFire(bulletL);
         break;
       case 3:
-        BulletFire(GetBullet("Player_Bullet_A", Vector3.right * 0.35f));
-        BulletFire(GetBullet("Player_Bullet_B", Vector3.zero));
-        BulletFire(GetBullet("Player_Bullet_A", Vector3.left * 0.35f));
+        GameObject bulletRR = objectManager.MakeObj("BulletPlayerA");
+        GameObject bulletC = objectManager.MakeObj("BulletPlayerB");
+        GameObject bulletLL = objectManager.MakeObj("BulletPlayerA");
+        bulletRR.transform.position = transform.position + Vector3.right * 0.35f;
+        bulletC.transform.position = transform.position;
+        bulletLL.transform.position = transform.position + Vector3.left * 0.35f;
+        BulletFire(bulletRR);
+        BulletFire(bulletC);
+        BulletFire(bulletLL);
         break;
     }
     curShotDelay = 0;
@@ -97,21 +106,51 @@ public class Player : MonoBehaviour
 
     boom--;
     isBoomTime = true;
-    manager.UpdateBoomIcon(boom);
+    gameManager.UpdateBoomIcon(boom);
 
     //#1. Effect visible
     boomEffect.SetActive(true);
     Invoke("OffBoomEffect", 3f);
+
+
     //#2. Remove Enemy
-    GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-    foreach (GameObject enemy in enemies)
+    GameObject[] enemiesL = objectManager.GetPool("EnemyL");
+    GameObject[] enemiesM = objectManager.GetPool("EnemyM");
+    GameObject[] enemiesS = objectManager.GetPool("EnemyS");
+
+    foreach (GameObject enemy in enemiesL)
     {
+      if (!enemy.activeSelf) continue;
       Enemy enemyLogic = enemy.GetComponent<Enemy>();
       enemyLogic.OnHit(1000);
     }
+    foreach (GameObject enemy in enemiesM)
+    {
+      if (!enemy.activeSelf) continue;
+      Enemy enemyLogic = enemy.GetComponent<Enemy>();
+      enemyLogic.OnHit(1000);
+    }
+    foreach (GameObject enemy in enemiesS)
+    {
+      if (!enemy.activeSelf) continue;
+      Enemy enemyLogic = enemy.GetComponent<Enemy>();
+      enemyLogic.OnHit(1000);
+    }
+
+
     //#. Remove Enemy Bullet
-    GameObject[] enemiesbulltets = GameObject.FindGameObjectsWithTag("EnemyBullet");
-    Array.ForEach<GameObject>(enemiesbulltets, (bullet) => Destroy(bullet));
+    GameObject[] enemiesbulltetsA = objectManager.GetPool("BulletEnemyA");
+    GameObject[] enemiesbulltetsB = objectManager.GetPool("BulletEnemyB");
+    for (int i = 0; i < enemiesbulltetsA.Length; i++)
+    {
+      if (!enemiesbulltetsA[i].activeSelf) continue;
+      enemiesbulltetsA[i].SetActive(false);
+    }
+    for (int i = 0; i < enemiesbulltetsB.Length; i++)
+    {
+      if (!enemiesbulltetsB[i].activeSelf) continue;
+      enemiesbulltetsB[i].SetActive(false);
+    }
   }
   void OnTriggerEnter2D(Collider2D collision)
   {
@@ -122,17 +161,18 @@ public class Player : MonoBehaviour
 
       isHit = true;
       life--;
-      manager.UpdateLifeIcon(life);
+      gameManager.UpdateLifeIcon(life);
       if (life == 0)
       {
-        manager.GameOver();
+        gameManager.GameOver();
       }
       else
       {
-        manager.RespawnPlayer();
+        gameManager.RespawnPlayer();
       }
       gameObject.SetActive(false);
-      Destroy(collision.gameObject);
+
+      collision.gameObject.SetActive(false);
     }
     else if (collision.gameObject.tag == "Item")
     {
@@ -153,10 +193,10 @@ public class Player : MonoBehaviour
             score += 1000;
           else
             boom++;
-          manager.UpdateBoomIcon(boom);
+          gameManager.UpdateBoomIcon(boom);
           break;
       }
-      Destroy(collision.gameObject);
+      collision.gameObject.SetActive(false);
     }
   }
   void OffBoomEffect()

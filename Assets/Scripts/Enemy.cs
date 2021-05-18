@@ -13,12 +13,10 @@ public class Enemy : MonoBehaviour
   public float maxShotDelay;
   public float curShotDelay;
   public GameObject player;
+  public ObjectManager objectManager;
   Func<Enemy, Vector3> GetPosition = (Enemy) => Enemy.transform.position;
   Func<Enemy, Quaternion> GetRotation = (Enemy) => Enemy.transform.rotation;
-  Func<string, Vector3, Vector3, Quaternion, GameObject> GetPrefab = (PrefabName, offset, thisPostion, thisRotation)
-      => Instantiate(Resources.Load<GameObject>("Prefabs/" + PrefabName),
-                     thisPostion + offset,
-                     thisRotation);
+
 
   SpriteRenderer spriteRenderer;
 
@@ -31,6 +29,17 @@ public class Enemy : MonoBehaviour
     Reload();
     Fire();
   }
+
+  void OnEnable()
+  {
+    health = enemyName switch
+    {
+      "S" => 3,
+      "M" => 10,
+      "L" => 40,
+      _ => 0,
+    };
+  }
   void Fire()
   {
 
@@ -42,12 +51,18 @@ public class Enemy : MonoBehaviour
 
     if (enemyName == "S")
     {
-      BulletFire(GetPrefab("Enemy_Bullet_A", Vector3.zero, GetPosition(this), GetRotation(this)));
+      GameObject bullet = objectManager.MakeObj("BulletEnemyA");
+      bullet.transform.position = transform.position;
+      BulletFire(bullet);
     }
     if (enemyName == "L")
     {
-      BulletFire(GetPrefab("Enemy_Bullet_B", Vector3.right * 0.35f, GetPosition(this), GetRotation(this)));
-      BulletFire(GetPrefab("Enemy_Bullet_B", Vector3.left * 0.35f, GetPosition(this), GetRotation(this)));
+      GameObject bulletL = objectManager.MakeObj("BulletEnemyB");
+      GameObject bulletR = objectManager.MakeObj("BulletEnemyB");
+      bulletL.transform.position = transform.position + Vector3.left * 0.35f;
+      bulletR.transform.position = transform.position + Vector3.right * 0.35f;
+      BulletFire(bulletL);
+      BulletFire(bulletR);
     }
     curShotDelay = 0;
   }
@@ -77,17 +92,24 @@ public class Enemy : MonoBehaviour
       }
       else if (ran < 6) //Coin 30%
       {
-        GetPrefab("Item Coin", Vector3.zero, GetPosition(this), GetRotation(this)).transform.rotation = LookDown;
+        GameObject item = objectManager.MakeObj("ItemCoin");
+        item.transform.position = transform.position;
+        item.transform.rotation = LookDown;
       }
       else if (ran < 8) //Power 20%
       {
-        GetPrefab("Item Power", Vector3.zero, GetPosition(this), GetRotation(this)).transform.rotation = LookDown;
+        GameObject item = objectManager.MakeObj("ItemPower");
+        item.transform.position = transform.position;
+        item.transform.rotation = LookDown;
       }
       else if (ran < 10) //Boom 20%
       {
-        GetPrefab("Item Boom", Vector3.zero, GetPosition(this), GetRotation(this)).transform.rotation = LookDown;
+        GameObject item = objectManager.MakeObj("ItemBoom");
+        item.transform.position = transform.position;
+        item.transform.rotation = LookDown;
       }
-      Destroy(gameObject);
+      gameObject.SetActive(false);
+      transform.rotation = Quaternion.identity;
     }
   }
 
@@ -101,14 +123,14 @@ public class Enemy : MonoBehaviour
     var colObj = collision.gameObject;
     if (colObj.tag == "BorderBullet")
     {
-      Destroy(gameObject);
+      gameObject.SetActive(false);
+      transform.rotation = Quaternion.identity;
     }
     else if (colObj.tag == "PlayerBullet")
     {
       Bullet bullet = colObj.GetComponent<Bullet>();
+      colObj.SetActive(false);
       OnHit(bullet.damage);
-
-      Destroy(colObj);
     }
   }
 }
