@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3628051320845247358}
   - component: {fileID: 3628051320845247345}
   - component: {fileID: 3628051320845247344}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemy_Large
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -154,3 +154,7 @@ MonoBehaviour:
   maxShotDelay: 3
   curShotDelay: 0
   player: {fileID: 0}
+  objectManager: {fileID: 0}
+  patternIndex: 0
+  curPatternCount: 0
+  maxPatternCount: 

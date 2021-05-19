@@ -175,6 +175,11 @@ public class Player : MonoBehaviour
       }
       gameObject.SetActive(false);
 
+      if (collision.gameObject.tag == "Enemy")
+      {
+        if (collision.gameObject.GetComponent<Enemy>().enemyName == "B")
+          return;
+      }
       collision.gameObject.SetActive(false);
     }
     else if (collision.gameObject.tag == "Item")

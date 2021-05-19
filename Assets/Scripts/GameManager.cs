@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
   void Awake()
   {
-    enemyObjs = new string[] { "EnemyS", "EnemyM", "EnemyL" };
+    enemyObjs = new string[] { "EnemyS", "EnemyM", "EnemyL", "EnemyB" };
     spawnList = new List<Spawn>();
     ReadSpawnFile();
   }
@@ -92,6 +92,9 @@ public class GameManager : MonoBehaviour
       case "L":
         enemyIndex = 2;
         break;
+      case "B":
+        enemyIndex = 3;
+        break;
     }
     int enemyPoint = spawnList[spawnIndex].point;
 
@@ -129,15 +132,25 @@ public class GameManager : MonoBehaviour
 
   public void RespawnPlayer()
   {
-    Invoke("RespawnPlayerExe", 2f);
+    Invoke("RespawnPlayerStart", 2f);
   }
-  void RespawnPlayerExe()
+  void RespawnPlayerStart()
   {
     player.transform.position = RespawnPoistion;
     player.SetActive(true);
 
+    // Change Layer (Immortal Active)
+    player.layer = 7;
+    player.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.4f);
+    Invoke("RespawnPlayerEnd", 3f);
     Player playerLogic = player.GetComponent<Player>();
     playerLogic.isHit = false;
+  }
+
+  void RespawnPlayerEnd()
+  {
+    player.layer = 6;
+    player.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
   }
 
   public void UpdateLifeIcon(int life)

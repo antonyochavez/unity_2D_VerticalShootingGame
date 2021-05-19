@@ -9,6 +9,7 @@ public class ObjectManager : MonoBehaviour
   GameObject[] Enemy_Small;
   GameObject[] Enemy_Medium;
   GameObject[] Enemy_Large;
+  GameObject[] Enemy_Boss;
 
   GameObject[] Item_Coin;
   GameObject[] Item_Power;
@@ -19,6 +20,8 @@ public class ObjectManager : MonoBehaviour
   GameObject[] Follower_Bullet;
   GameObject[] Enemy_Bullet_A;
   GameObject[] Enemy_Bullet_B;
+  GameObject[] Enemy_Bullet_C;
+  GameObject[] Enemy_Bullet_D;
 
   GameObject[] targetPool;
 
@@ -26,6 +29,7 @@ public class ObjectManager : MonoBehaviour
 
   void Awake()
   {
+    Enemy_Boss = new GameObject[1];
     Enemy_Large = new GameObject[20];
     Enemy_Medium = new GameObject[20];
     Enemy_Small = new GameObject[100];
@@ -39,6 +43,8 @@ public class ObjectManager : MonoBehaviour
     Follower_Bullet = new GameObject[30];
     Enemy_Bullet_A = new GameObject[400];
     Enemy_Bullet_B = new GameObject[100];
+    Enemy_Bullet_C = new GameObject[200];
+    Enemy_Bullet_D = new GameObject[200];
 
     Generate();
   }
@@ -46,6 +52,8 @@ public class ObjectManager : MonoBehaviour
   void Generate()
   {
     //#1. Enemy
+    Enemy_Boss[0] = GetPrefab("Enemy_B");
+    Enemy_Boss[0].SetActive(false);
     for (int i = 0; i < Enemy_Large.Length; i++)
     {
       Enemy_Large[i] = GetPrefab("Enemy_Large");
@@ -106,6 +114,16 @@ public class ObjectManager : MonoBehaviour
       Enemy_Bullet_B[i] = GetPrefab("Enemy_Bullet_B");
       Enemy_Bullet_B[i].SetActive(false);
     }
+    for (int i = 0; i < Enemy_Bullet_C.Length; i++)
+    {
+      Enemy_Bullet_C[i] = GetPrefab("Enemy_Bullet_C");
+      Enemy_Bullet_C[i].SetActive(false);
+    }
+    for (int i = 0; i < Enemy_Bullet_D.Length; i++)
+    {
+      Enemy_Bullet_D[i] = GetPrefab("Enemy_Bullet_D");
+      Enemy_Bullet_D[i].SetActive(false);
+    }
   }
 
   public GameObject MakeObj(string type)
@@ -115,6 +133,7 @@ public class ObjectManager : MonoBehaviour
       "EnemyL" => Enemy_Large,
       "EnemyM" => Enemy_Medium,
       "EnemyS" => Enemy_Small,
+      "EnemyB" => Enemy_Boss,
       "ItemCoin" => Item_Coin,
       "ItemPower" => Item_Power,
       "ItemBoom" => Item_Boom,
@@ -123,6 +142,8 @@ public class ObjectManager : MonoBehaviour
       "Follower_Bullet" => Follower_Bullet,
       "BulletEnemyA" => Enemy_Bullet_A,
       "BulletEnemyB" => Enemy_Bullet_B,
+      "BulletEnemyC" => Enemy_Bullet_C,
+      "BulletEnemyD" => Enemy_Bullet_D,
       _ => throw new ArgumentNullException(),
     };
 
@@ -144,6 +165,7 @@ public class ObjectManager : MonoBehaviour
       "EnemyL" => Enemy_Large,
       "EnemyM" => Enemy_Medium,
       "EnemyS" => Enemy_Small,
+      "EnemyB" => Enemy_Boss,
       "ItemCoin" => Item_Coin,
       "ItemPower" => Item_Power,
       "ItemBoom" => Item_Boom,
@@ -152,6 +174,8 @@ public class ObjectManager : MonoBehaviour
       "Follower_Bullet" => Follower_Bullet,
       "BulletEnemyA" => Enemy_Bullet_A,
       "BulletEnemyB" => Enemy_Bullet_B,
+      "BulletEnemyC" => Enemy_Bullet_C,
+      "BulletEnemyD" => Enemy_Bullet_D,
       _ => throw new ArgumentNullException(),
     };
     return targetPool;

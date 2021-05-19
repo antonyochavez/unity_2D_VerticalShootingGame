@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2025816225112480752}
   - component: {fileID: 2025816225112480753}
   - component: {fileID: 2025816225112480766}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemy_Medium
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -159,3 +159,7 @@ MonoBehaviour:
   maxShotDelay: 0
   curShotDelay: 0
   player: {fileID: 0}
+  objectManager: {fileID: 0}
+  patternIndex: 0
+  curPatternCount: 0
+  maxPatternCount: 
