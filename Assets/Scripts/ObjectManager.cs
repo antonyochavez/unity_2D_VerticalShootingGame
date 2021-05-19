@@ -25,17 +25,17 @@ public class ObjectManager : MonoBehaviour
 
   void Awake()
   {
-    Enemy_Large = new GameObject[10];
-    Enemy_Medium = new GameObject[10];
-    Enemy_Small = new GameObject[20];
+    Enemy_Large = new GameObject[20];
+    Enemy_Medium = new GameObject[20];
+    Enemy_Small = new GameObject[100];
 
-    Item_Coin = new GameObject[20];
-    Item_Power = new GameObject[10];
-    Item_Boom = new GameObject[10];
+    Item_Coin = new GameObject[50];
+    Item_Power = new GameObject[50];
+    Item_Boom = new GameObject[50];
 
     Player_Bullet_A = new GameObject[100];
     Player_Bullet_B = new GameObject[100];
-    Enemy_Bullet_A = new GameObject[100];
+    Enemy_Bullet_A = new GameObject[400];
     Enemy_Bullet_B = new GameObject[100];
 
     Generate();

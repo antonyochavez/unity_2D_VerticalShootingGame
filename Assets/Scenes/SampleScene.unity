@@ -320,7 +320,7 @@ MonoBehaviour:
   - {fileID: 1264964250}
   - {fileID: 1313230424}
   - {fileID: 2089098962}
-  maxSpawnDelay: 2
+  nextSpawnDelay: 0
   curSpawnDelay: 0
   player: {fileID: 563356589}
   scoreText: {fileID: 2138653902}
@@ -334,6 +334,8 @@ MonoBehaviour:
   - {fileID: 2008072852}
   gameOverSet: {fileID: 1539784522}
   objectManager: {fileID: 1689759999}
+  spawnIndex: 0
+  spawnEnd: 0
 --- !u!4 &156349177
 Transform:
   m_ObjectHideFlags: 0
@@ -1174,7 +1176,7 @@ MonoBehaviour:
   life: 3
   score: 0
   speed: 3
-  power: 3
+  power: 1
   boom: 0
   maxPower: 3
   maxBoom: 3

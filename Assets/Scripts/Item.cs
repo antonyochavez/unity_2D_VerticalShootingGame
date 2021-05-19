@@ -13,7 +13,7 @@ public class Item : MonoBehaviour
   }
   void OnEnable()
   {
-    rigid.velocity = Vector2.down * 0.5f;
+    rigid.velocity = Vector2.down * 1.5f;
   }
   void OnTriggerEnter2D(Collider2D collision)
   {
