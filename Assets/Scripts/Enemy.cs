@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
   public float maxShotDelay;
   public float curShotDelay;
   public GameObject player;
+  public GameManager gameManager;
   public ObjectManager objectManager;
   Func<Enemy, Vector3> GetPosition = (Enemy) => Enemy.transform.position;
   Func<Enemy, Quaternion> GetRotation = (Enemy) => Enemy.transform.rotation;
@@ -257,6 +258,7 @@ public class Enemy : MonoBehaviour
       }
       gameObject.SetActive(false);
       transform.rotation = Quaternion.identity;
+      gameManager.CallExplosion(transform.position, enemyName);
     }
   }
 

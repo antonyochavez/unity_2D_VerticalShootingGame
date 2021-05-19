@@ -22,6 +22,7 @@ public class ObjectManager : MonoBehaviour
   GameObject[] Enemy_Bullet_B;
   GameObject[] Enemy_Bullet_C;
   GameObject[] Enemy_Bullet_D;
+  GameObject[] Explosion;
 
   GameObject[] targetPool;
 
@@ -43,8 +44,9 @@ public class ObjectManager : MonoBehaviour
     Follower_Bullet = new GameObject[30];
     Enemy_Bullet_A = new GameObject[400];
     Enemy_Bullet_B = new GameObject[100];
-    Enemy_Bullet_C = new GameObject[200];
+    Enemy_Bullet_C = new GameObject[500];
     Enemy_Bullet_D = new GameObject[200];
+    Explosion = new GameObject[100];
 
     Generate();
   }
@@ -124,6 +126,15 @@ public class ObjectManager : MonoBehaviour
       Enemy_Bullet_D[i] = GetPrefab("Enemy_Bullet_D");
       Enemy_Bullet_D[i].SetActive(false);
     }
+
+    //4. Effect
+    for (int i = 0; i < Explosion.Length; i++)
+    {
+      Explosion[i] = GetPrefab("Explosion");
+      Explosion[i].SetActive(false);
+    }
+
+
   }
 
   public GameObject MakeObj(string type)
@@ -144,6 +155,7 @@ public class ObjectManager : MonoBehaviour
       "BulletEnemyB" => Enemy_Bullet_B,
       "BulletEnemyC" => Enemy_Bullet_C,
       "BulletEnemyD" => Enemy_Bullet_D,
+      "Explosion" => Explosion,
       _ => throw new ArgumentNullException(),
     };
 
@@ -176,6 +188,7 @@ public class ObjectManager : MonoBehaviour
       "BulletEnemyB" => Enemy_Bullet_B,
       "BulletEnemyC" => Enemy_Bullet_C,
       "BulletEnemyD" => Enemy_Bullet_D,
+      "Explosion" => Explosion,
       _ => throw new ArgumentNullException(),
     };
     return targetPool;
