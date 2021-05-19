@@ -120,6 +120,7 @@ public class Player : MonoBehaviour
     GameObject[] enemiesL = objectManager.GetPool("EnemyL");
     GameObject[] enemiesM = objectManager.GetPool("EnemyM");
     GameObject[] enemiesS = objectManager.GetPool("EnemyS");
+    GameObject[] enemiesBoss = objectManager.GetPool("Enemy_B");
 
     foreach (GameObject enemy in enemiesL)
     {
@@ -139,11 +140,19 @@ public class Player : MonoBehaviour
       Enemy enemyLogic = enemy.GetComponent<Enemy>();
       enemyLogic.OnHit(1000);
     }
+    foreach (GameObject enemy in enemiesS)
+    {
+      if (!enemy.activeSelf) continue;
+      Enemy enemyLogic = enemy.GetComponent<Enemy>();
+      enemyLogic.OnHit(200);
+    }
 
 
     //#. Remove Enemy Bullet
     GameObject[] enemiesbulltetsA = objectManager.GetPool("BulletEnemyA");
     GameObject[] enemiesbulltetsB = objectManager.GetPool("BulletEnemyB");
+    GameObject[] enemiesbulltetsC = objectManager.GetPool("BulletEnemyC");
+    GameObject[] enemiesbulltetsD = objectManager.GetPool("BulletEnemyD");
     for (int i = 0; i < enemiesbulltetsA.Length; i++)
     {
       if (!enemiesbulltetsA[i].activeSelf) continue;
@@ -153,6 +162,16 @@ public class Player : MonoBehaviour
     {
       if (!enemiesbulltetsB[i].activeSelf) continue;
       enemiesbulltetsB[i].SetActive(false);
+    }
+    for (int i = 0; i < enemiesbulltetsC.Length; i++)
+    {
+      if (!enemiesbulltetsC[i].activeSelf) continue;
+      enemiesbulltetsC[i].SetActive(false);
+    }
+    for (int i = 0; i < enemiesbulltetsD.Length; i++)
+    {
+      if (!enemiesbulltetsD[i].activeSelf) continue;
+      enemiesbulltetsD[i].SetActive(false);
     }
   }
   void OnTriggerEnter2D(Collider2D collision)
