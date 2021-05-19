@@ -16,6 +16,7 @@ public class ObjectManager : MonoBehaviour
 
   GameObject[] Player_Bullet_A;
   GameObject[] Player_Bullet_B;
+  GameObject[] Follower_Bullet;
   GameObject[] Enemy_Bullet_A;
   GameObject[] Enemy_Bullet_B;
 
@@ -35,6 +36,7 @@ public class ObjectManager : MonoBehaviour
 
     Player_Bullet_A = new GameObject[100];
     Player_Bullet_B = new GameObject[100];
+    Follower_Bullet = new GameObject[30];
     Enemy_Bullet_A = new GameObject[400];
     Enemy_Bullet_B = new GameObject[100];
 
@@ -89,6 +91,11 @@ public class ObjectManager : MonoBehaviour
       Player_Bullet_B[i] = GetPrefab("Player_Bullet_B");
       Player_Bullet_B[i].SetActive(false);
     }
+    for (int i = 0; i < Follower_Bullet.Length; i++)
+    {
+      Follower_Bullet[i] = GetPrefab("Follower_Bullet");
+      Follower_Bullet[i].SetActive(false);
+    }
     for (int i = 0; i < Enemy_Bullet_A.Length; i++)
     {
       Enemy_Bullet_A[i] = GetPrefab("Enemy_Bullet_A");
@@ -113,6 +120,7 @@ public class ObjectManager : MonoBehaviour
       "ItemBoom" => Item_Boom,
       "BulletPlayerA" => Player_Bullet_A,
       "BulletPlayerB" => Player_Bullet_B,
+      "Follower_Bullet" => Follower_Bullet,
       "BulletEnemyA" => Enemy_Bullet_A,
       "BulletEnemyB" => Enemy_Bullet_B,
       _ => throw new ArgumentNullException(),
@@ -141,6 +149,7 @@ public class ObjectManager : MonoBehaviour
       "ItemBoom" => Item_Boom,
       "BulletPlayerA" => Player_Bullet_A,
       "BulletPlayerB" => Player_Bullet_B,
+      "Follower_Bullet" => Follower_Bullet,
       "BulletEnemyA" => Enemy_Bullet_A,
       "BulletEnemyB" => Enemy_Bullet_B,
       _ => throw new ArgumentNullException(),
