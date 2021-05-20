@@ -214,6 +214,8 @@ public class Player : MonoBehaviour
       if (!enemiesbulltetsD[i].activeSelf) continue;
       enemiesbulltetsD[i].SetActive(false);
     }
+
+    isButtonB = false;
   }
   void OnTriggerEnter2D(Collider2D collision)
   {
