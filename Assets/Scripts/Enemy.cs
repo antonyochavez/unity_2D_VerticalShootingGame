@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
   public float maxShotDelay;
   public float curShotDelay;
   public GameObject player;
+  public GameManager gameManager;
   public ObjectManager objectManager;
   Func<Enemy, Vector3> GetPosition = (Enemy) => Enemy.transform.position;
   Func<Enemy, Quaternion> GetRotation = (Enemy) => Enemy.transform.rotation;
@@ -45,7 +46,7 @@ public class Enemy : MonoBehaviour
       "S" => 3,
       "M" => 10,
       "L" => 40,
-      "B" => 3000,
+      "B" => 2500,
       _ => 0,
     };
     if (enemyName == "B")
@@ -257,6 +258,11 @@ public class Enemy : MonoBehaviour
       }
       gameObject.SetActive(false);
       transform.rotation = Quaternion.identity;
+      gameManager.CallExplosion(transform.position, enemyName);
+
+      //#.Boss Kill
+      if (enemyName == "B")
+        gameManager.StageEnd();
     }
   }
 

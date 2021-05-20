@@ -17,6 +17,10 @@ public class Player : MonoBehaviour
   public bool isHit;
   public bool isBoomTime;
 
+  public bool[] joyControl;
+  public bool isControl;
+  public bool isButtonA;
+  public bool isButtonB;
 
   public GameObject[] followers;
 
@@ -40,9 +44,22 @@ public class Player : MonoBehaviour
     Reload();
   }
 
+  public void JoyPanel(int type)
+  {
+    for (int i = 0; i < 9; i++)
+    {
+      joyControl[i] = i == type;
+    }
+  }
+
+  public void JoyDown() => isControl = true;
+  public void JoyUp() => isControl = false;
+
   void Fire()
   {
-    if (!Input.GetButton("Fire1"))
+    // if (!Input.GetButton("Fire1"))
+    //   return;
+    if (!isButtonA)
       return;
 
     if (curShotDelay < maxShotDelay)
@@ -86,8 +103,26 @@ public class Player : MonoBehaviour
   }
   void Move()
   {
+
+
+    //#.Keyboard Control Value
     float h = Input.GetAxisRaw("Horizontal");
     float v = Input.GetAxisRaw("Vertical");
+
+    //#.Joy Control Value
+    if (joyControl[0]) { h = -1; v = 1; }
+    if (joyControl[1]) { h = 0; v = 1; }
+    if (joyControl[2]) { h = 1; v = 1; }
+    if (joyControl[3]) { h = -1; v = 0; }
+    if (joyControl[4]) { h = 0; v = 0; }
+    if (joyControl[5]) { h = 1; v = 0; }
+    if (joyControl[6]) { h = -1; v = -1; }
+    if (joyControl[7]) { h = 0; v = -1; }
+    if (joyControl[8]) { h = 1; v = -1; }
+
+    if (!isControl)
+      return;
+
     Vector3 nextPos = transform.position + new Vector3(h, v, 0).normalized * speed * Time.deltaTime;
     transform.position = new Vector3(Mathf.Clamp(nextPos.x, -2.2f, 2.2f), Mathf.Clamp(nextPos.y, -4.5f, 4.5f), nextPos.z);
 
@@ -97,9 +132,15 @@ public class Player : MonoBehaviour
     }
   }
 
+  public void ButtonADown() => isButtonA = true;
+  public void ButtonAUp() => isButtonA = false;
+  public void ButtonBDown() => isButtonB = true;
+
   void Boom()
   {
-    if (!Input.GetButton("Fire2"))
+    // if (!Input.GetButton("Fire2"))
+    //   return;
+    if (!isButtonB)
       return;
     if (isBoomTime)
       return;
@@ -120,6 +161,7 @@ public class Player : MonoBehaviour
     GameObject[] enemiesL = objectManager.GetPool("EnemyL");
     GameObject[] enemiesM = objectManager.GetPool("EnemyM");
     GameObject[] enemiesS = objectManager.GetPool("EnemyS");
+    GameObject[] enemiesBoss = objectManager.GetPool("EnemyB");
 
     foreach (GameObject enemy in enemiesL)
     {
@@ -139,11 +181,19 @@ public class Player : MonoBehaviour
       Enemy enemyLogic = enemy.GetComponent<Enemy>();
       enemyLogic.OnHit(1000);
     }
+    foreach (GameObject enemy in enemiesS)
+    {
+      if (!enemy.activeSelf) continue;
+      Enemy enemyLogic = enemy.GetComponent<Enemy>();
+      enemyLogic.OnHit(200);
+    }
 
 
     //#. Remove Enemy Bullet
     GameObject[] enemiesbulltetsA = objectManager.GetPool("BulletEnemyA");
     GameObject[] enemiesbulltetsB = objectManager.GetPool("BulletEnemyB");
+    GameObject[] enemiesbulltetsC = objectManager.GetPool("BulletEnemyC");
+    GameObject[] enemiesbulltetsD = objectManager.GetPool("BulletEnemyD");
     for (int i = 0; i < enemiesbulltetsA.Length; i++)
     {
       if (!enemiesbulltetsA[i].activeSelf) continue;
@@ -154,6 +204,18 @@ public class Player : MonoBehaviour
       if (!enemiesbulltetsB[i].activeSelf) continue;
       enemiesbulltetsB[i].SetActive(false);
     }
+    for (int i = 0; i < enemiesbulltetsC.Length; i++)
+    {
+      if (!enemiesbulltetsC[i].activeSelf) continue;
+      enemiesbulltetsC[i].SetActive(false);
+    }
+    for (int i = 0; i < enemiesbulltetsD.Length; i++)
+    {
+      if (!enemiesbulltetsD[i].activeSelf) continue;
+      enemiesbulltetsD[i].SetActive(false);
+    }
+
+    isButtonB = false;
   }
   void OnTriggerEnter2D(Collider2D collision)
   {
@@ -165,6 +227,7 @@ public class Player : MonoBehaviour
       isHit = true;
       life--;
       gameManager.UpdateLifeIcon(life);
+      gameManager.CallExplosion(transform.position, "P");
       if (life == 0)
       {
         gameManager.GameOver();
