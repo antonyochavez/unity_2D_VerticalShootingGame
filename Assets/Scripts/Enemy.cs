@@ -46,7 +46,7 @@ public class Enemy : MonoBehaviour
       "S" => 3,
       "M" => 10,
       "L" => 40,
-      "B" => 3000,
+      "B" => 2500,
       _ => 0,
     };
     if (enemyName == "B")
@@ -259,6 +259,10 @@ public class Enemy : MonoBehaviour
       gameObject.SetActive(false);
       transform.rotation = Quaternion.identity;
       gameManager.CallExplosion(transform.position, enemyName);
+
+      //#.Boss Kill
+      if (enemyName == "B")
+        gameManager.StageEnd();
     }
   }
 
